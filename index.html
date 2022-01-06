@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Animation Demo</p>
+
+<div style="relative" id="demo"></div>
+
+<script>
+
+(function () {
+  let word = ['6', '0', '9'];
+
+  const div =  document.getElementById("demo");
+  let span = document.createElement('span')
+  span.style.position = 'absolute'
+  let coll = Array(Math.floor(window.innerWidth/5)).fill().map((_, i)=>{
+    let cop = span.cloneNode(true);
+      // console.log(cop);
+    cop.innerHTML = word[i % word.length];
+    div.appendChild(cop);
+
+    return {
+     sign:[-1,2][i%2],
+     signX:[-1,2][i%2],
+     // txt,
+     x: Math.random()* (window.innerWidth- 20) ,
+     y: Math.random()* (window.innerHeight- 20),
+     r:  Math.random(),
+    }
+  });
+  
+  const anim=()=>{
+
+  
+	 // console.log('111: ', 111);
+	  setTimeout(()=>{
+		  let fram = requestAnimationFrame(anim);
+
+		  coll= coll.map((data, i)=>{
+		  	data.y += data.sign*(0.7+data.r);
+		  	data.x += data.signX*(0.7+data.r);
+		  	// if(data.y < 0){
+		  	//   data.sign *= -1;
+			  // 	data.y += data.sign*(0.7+data.r);
+		  	// }
+		  	if(data.y > window.innerHeight-20 || data.y < 0){
+		  		data.sign *= -1;
+		  		data.y += data.sign*(0.7+data.r); 
+		  	}
+		  	// if( data.x < 0){
+		  	//   data.signX *= -1;
+			  // 	data.x += data.signX*(0.7+data.r);
+		  	// }
+		  	if(data.x > window.innerWidth-20 ||  data.x < 0){
+		  		data.signX *= -1;
+		  		data.x += data.signX*(0.7+data.r);
+		  	}
+				div.children[i].style.left = data.x+'px';
+				div.children[i].style.top = data.y +'px';
+				// div.children[i].innerHTML = data.txt;
+				div.children[i].style.transform = `scale(${data.r})`;
+
+				return data;
+			})
+		},100)
+  }
+
+	anim();
+})()
+</script>
+
+</body>
+
+</html>
